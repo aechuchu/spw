@@ -26,12 +26,17 @@ public class SpaceShip extends Sprite{
 		g.fillRect(x+15,y+8,width,height+10);
 	}
 
-	public void move(int direction){
-		x += (step * direction);
+	public void move(int directionx,int directiony){
+		x += (step * directionx);
 		if(x < 0)
 			x = 0;
 		if(x > 400 - width)
 			x = 400 - width;
+		y += (step * directiony);
+		if(y < 0)
+			y = 0;
+		if(y > 600 - height)
+			y = 600 - height;
 	}
 
 }
