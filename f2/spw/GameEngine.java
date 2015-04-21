@@ -45,7 +45,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void generateEnemy(){
-		Enemy e = new Enemy((int)(Math.random()*390), 30);
+		Enemy e = new Enemy((int)(Math.random()*390), 10);
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
@@ -75,11 +75,13 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				score -= 500;
-				if(score==-500){
+				e.changestateenemy();
+				score -= 1500;
+				if(score==-1500){
 						die();
 						return;
-					}
+				}
+				
 			}
 		}
 		
