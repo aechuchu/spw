@@ -45,7 +45,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void generateEnemy(){
-		Enemy e = new Enemy((int)(Math.random()*390), 10);
+		Enemy e = new Enemy((int)(Math.random()*400), 10);
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
@@ -87,8 +87,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 	}
 	
-	 public void die(){
+	public void die(){
 		timer.stop();
+		gp.updateGameUI();
 	}
 	
 	void controlVehicle(KeyEvent e) {

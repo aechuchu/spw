@@ -32,6 +32,15 @@ public class GamePanel extends JPanel {
 		repaint();
 	}
 
+	public void updateGameUI(){
+		
+		big.clearRect(0, 0, 400, 600);
+		
+		big.setColor(Color.RED);
+		big.drawString("Game Over!!", 160, 300);	
+
+		repaint();
+	}
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
