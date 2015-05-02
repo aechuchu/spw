@@ -14,7 +14,8 @@ import javax.swing.Timer;
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
-	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Gun> shootings = new ArrayList<Gun>();	
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -68,10 +69,18 @@ public class GameEngine implements KeyListener, GameReporter{
 				
 		}
 		
+		
+        	Iterator<Gun> s_iter = shootings.iterator();
+                while(s_iter.hasNext()){
+                    Gun s = s_iter.next();
+                    s.proceed();
+                }
+		
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
+		Rectangle2D.Double sr;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
@@ -83,10 +92,18 @@ public class GameEngine implements KeyListener, GameReporter{
 				}
 				
 			}
-		}
 		
-	}
-	
+			for(Gun s : shootings){
+				sr = s.getRectangle();
+				if(sr.intersects(er)){
+					e.changestateenemy();
+					return;
+				}	
+		
+			}
+
+		}
+	}	
 	public void die(){
 		timer.stop();
 		gp.updateGameUI();
@@ -109,9 +126,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
 			break;
+		case KeyEvent.VK_SPACE:
+			fire();
+			break;
 		}
 	}
 
+	public void fire(){
+            Gun s = new Gun((v.x) + 8 , v.y);
+            gp.sprites.add(s);
+            shootings.add(s);
+        }
 	public long getScore(){
 		return score;
 	}
