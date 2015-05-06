@@ -25,7 +25,6 @@ public class GamePanel extends JPanel {
 		
 		big.setColor(Color.RED);		
 		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
-		big.drawString(String.format("Bomb : %01d", reporter.getBombb()), 20, 20);
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
