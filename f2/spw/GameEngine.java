@@ -15,9 +15,16 @@ public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private ArrayList<Gun> shootings = new ArrayList<Gun>();	
+	private ArrayList<Attack> shootings = new ArrayList<Attack>();	
+	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Bombb> booms = new ArrayList<Bombb>();
 	private SpaceShip v;	
 	
+
+
+	private int positionitem;
+	private int position1;
+	private int position2;
 	private Timer timer;
 	
 	private long score = 0;
@@ -46,15 +53,31 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void generateEnemy(){
-		Enemy e = new Enemy((int)(Math.random()*400), 10);
+		Enemy e = new Enemy((int)(Math.random()*400), 20);
+		Enemy e1 = new Enemy(position2, 20);
 		gp.sprites.add(e);
 		enemies.add(e);
+		gp.sprites.add(e1);
+		enemies.add(e1);
+	
 	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
+			position1=(int)(Math.random()*380);
 			generateEnemy();
+
+			position2=(int)(Math.random()*380);
+			
+			positionitem=(int)(Math.random()*6000);
+			bornItem();
+
+
+
+
+
 		}
+
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
@@ -64,36 +87,73 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 1000;
+				score += 100;
 			}
 				
 		}
+
+
+
+		Iterator<Item> t_iter = items.iterator();
+                while(t_iter.hasNext()){
+                    Item t = t_iter.next();
+                    t.proceed();
+
+            if(!t.isAlive()){
+            	t_iter.remove();
+            	gp.sprites.remove(t);
+            	score += 100;
+            	}
+            }
 		
 		
-        	Iterator<Gun> s_iter = shootings.iterator();
+        Iterator<Attack> s_iter = shootings.iterator();
                 while(s_iter.hasNext()){
-                    Gun s = s_iter.next();
+                    Attack s = s_iter.next();
                     s.proceed();
                 }
+
+
+		Iterator<Bombb> b_iter = booms.iterator();
+				while(b_iter.hasNext()){
+					Bombb b = b_iter.next();
+					b.proceed();
+		}
 		
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
 		Rectangle2D.Double sr;
+		Rectangle2D.Double br;
+		Rectangle2D.Double tr;
+
+
+
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
 				e.changestateenemy();
-				score -= 1500;
-				if(score==-1500){
+				score -= 1000;
+				if(score==0||score<0){
 						die();
 						return;
 				}
 				
 			}
+
+			for(Item t : items){
+				tr = t.getRectangle();
+				if(tr.intersects(vr)){
+					count+=100;
+					gp.sprites.remove(t);
+					t.itemdie();
+				
+					
+						return;
+			}
 		
-			for(Gun s : shootings){
+			for(Attack s : shootings){
 				sr = s.getRectangle();
 				if(sr.intersects(er)){
 					e.changestateenemy();
@@ -102,8 +162,33 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 			}
 
+			for(Bombb b : booms){
+			br = b.getRectangle();
+			if(br.intersects(er)){
+				gp.sprites.remove(e);
+				e.changestateenemy();
+				gp.sprites.remove(b);
+				b.bombbdie();
+				
+
+				return;
+			}
 		}
+	}
+
+		
 	}	
+}
+	public void lbombb(){
+			Bbomb();
+			count-=20;		
+		   } 
+  	      
+     public int getBombb(){
+		return count;
+	}
+
+
 	public void die(){
 		timer.stop();
 		gp.updateGameUI();
@@ -123,20 +208,48 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_DOWN:
 			v.move(0,1);
 			break;
-		case KeyEvent.VK_D:
+		case KeyEvent.VK_E:
 			difficulty += 0.1;
 			break;
-		case KeyEvent.VK_SPACE:
+		case KeyEvent.VK_B:
 			fire();
 			break;
 		}
 	}
 
 	public void fire(){
-            Gun s = new Gun((v.x) + 8 , v.y);
+            Attack s = new Attack((v.x) + 8 , v.y);
             gp.sprites.add(s);
             shootings.add(s);
         }
+    
+    public void bornItem(){
+    	
+    	if(count >=1){
+			lbombb();
+		}
+		Item t = new Item(positionitem,20);
+    		gp.sprites.add(t);
+    		items.add(t);
+    		
+    }
+
+    public void Bbomb(){
+            Bombb b = new Bombb(position1,590);
+            Bombb b1 = new Bombb(position2,590);            
+            gp.sprites.add(b);
+            booms.add(b);
+            gp.sprites.add(b1);
+            booms.add(b1);            
+        }
+
+
+
+
+
+
+
+
 	public long getScore(){
 		return score;
 	}

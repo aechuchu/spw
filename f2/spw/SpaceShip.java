@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 public class SpaceShip extends Sprite{
 
-	int step = 8;
+	int step = 15;
 	
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -14,16 +14,16 @@ public class SpaceShip extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
+	
 		g.setColor(Color.BLUE);
-		g.fillRect(x, y, width, height);
-		g.fillRect(x-5,y+8,width,height);
-		g.fillRect(x+5,y+8,width,height);
+		g.fillRect(x-5, y+10, 10, 35);
+		g.fillRect(x-16, y+20, 33,10);
+		g.fillRect(x-20, y+40, 40,7);
+		g.setColor(Color.YELLOW);
+		g.fillRect(x-20, y+50, 10, 1);
+		g.fillRect(x+10, y+50, 10, 1);
 
-		g.fillRect(x-15,y+8,width,height-10);
-		g.fillRect(x+15,y+8,width,height-10);
 
-		g.fillRect(x-15,y+8,width,height+10);
-		g.fillRect(x+15,y+8,width,height+10);
 	}
 
 	public void move(int directionx,int directiony){
